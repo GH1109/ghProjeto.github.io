@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <title>Guia dos Odus</title>
+    <style>
+        .result-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 17px;
+            margin-top: 30px;
+            margin-left: 420px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .odu-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .interpretation {
+            background-color: #fff;
+            border-left: 4px solid #8B4513;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .odu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .odu-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .calculation-steps {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg text-bg-dark p-3">
+        <div class="container-fluid">
+            <a class="navbar-brand text-light" href="#">Guia dos Odus</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <li class="nav-item">
+                        <a class="nav-link active text-light" aria-current="page" href="index.html">Jogo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="listaOdus.html">Lista de Odus</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container d-flex flex-column justify-content-center min-vh-100">
+        <div class="row justify-content-center">
+            <div class="col-8 text-center mb-4">
+                <h1 class="display-4">Jogo dos Odus</h1>
+                <p class="lead">Faça aqui sua cabala</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-10 col-md-8 col-lg-6">
+                <form id="cabalaForm">
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6">
+                            <input type="text" id="nomeCompleto" class="form-control form-control-lg" placeholder="Nome Completo"
+                                aria-label="Nome Completo" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <input type="text" id="dataNascimento" class="form-control form-control-lg" placeholder="dd/mm/aaaa"
+                                aria-label="Data de Nascimento" required>
+                        </div>
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-dark btn-lg">Calcular Odus</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="resultados" class="row justify-content-center mt-5" style="display: none;">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="result-card">
+                    <h2 class="text-center mb-4">Seus Odus</h2>
+                    
+                    <div class="calculation-steps" id="passo-a-passo">
+                    
+                    </div>
+                    
+                    <div class="odu-grid" id="odu-container">
+                    
+                    </div>
+                    
+                    <div class="interpretation">
+                        <h4>Interpretação</h4>
+                        <p id="interpretacao-texto"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('cabalaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dataNascimento = document.getElementById('dataNascimento').value;
+            const nomeCompleto = document.getElementById('nomeCompleto').value;
+            
+            if (!dataNascimento) {
+                alert('Por favor, informe sua data de nascimento no formato DD/MM/AAAA.');
+                return;
+            }
+            
+            const resultado = calcular5Odus(dataNascimento);
+            if (resultado) {
+                exibirResultados(resultado, nomeCompleto);
+            }
+        });
+
+        function calcular5Odus(dataNascimento) {
+        
+            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
+                alert("Formato de data inválido! Use DD/MM/AAAA");
+                return null;
+            }
+
+            const partes = dataNascimento.split('/');
+            const dia = partes[0];
+            const mes = partes[1];
+            const ano = partes[2]; 
+
+            // Passo a passo de cálculo
+            let passosCalculo = `<h5>Passo a Passo para ${dataNascimento}</h5>`;
+            
+            // Passo 1: Separar todos os dígitos individuais
+            const digitos = [
+                parseInt(dia[0]), parseInt(dia[1]),  // Dia
+                parseInt(mes[0]), parseInt(mes[1]),  // Mês
+                parseInt(ano[0]), parseInt(ano[1]),  // Primeiros 2 do ano
+                parseInt(ano[2]), parseInt(ano[3])   // Últimos 2 do ano
+            ];
+            
+            passosCalculo += `<p>Dígitos separados: ${digitos.join(', ')}</p>`;
+            
+            // Passo 2: Soma dígitos da esquerda (primeiro dígito de cada grupo)
+            const esquerda = digitos[0] + digitos[2] + digitos[4] + digitos[6];
+            passosCalculo += `<p>Soma dígitos esquerda (${digitos[0]} + ${digitos[2]} + ${digitos[4]} + ${digitos[6]}) = ${esquerda}</p>`;
+            
+            // Passo 3: Soma dígitos da direita (segundo dígito de cada grupo)
+            const direita = digitos[1] + digitos[3] + digitos[5] + digitos[7];
+            passosCalculo += `<p>Soma dígitos direita (${digitos[1]} + ${digitos[3]} + ${digitos[5]} + ${digitos[7]}) = ${direita}</p>`;
+            
+            // Cálculo dos 5 Odus
+            const odu1 = reduzirOdu(esquerda);
+            passosCalculo += `<p>Primeiro Odu: ${esquerda} → ${odu1}</p>`;
+            
+            const odu2 = reduzirOdu(direita);
+            passosCalculo += `<p>Segundo Odu: ${direita} → ${odu2}</p>`;
+            
+            const odu3 = reduzirOdu(odu1 + odu2);
+            passosCalculo += `<p>Terceiro Odu: ${odu1} + ${odu2} = ${odu1 + odu2} → ${odu3}</p>`;
+            
+            const odu4 = reduzirOdu(odu1 + odu2 + odu3);
+            passosCalculo += `<p>Quarto Odu: ${odu1} + ${odu2} + ${odu3} = ${odu1 + odu2 + odu3} → ${odu4}</p>`;
+            
+            const odu5 = reduzirOdu(odu1 + odu2 + odu3 + odu4);
+            passosCalculo += `<p>Quinto Odu: ${odu1} + ${odu2} + ${odu3} + ${odu4} = ${odu1 + odu2 + odu3 + odu4} → ${odu5}</p>`;
+
+            const nomesOdus = {
+                1: "Okanran", 2: "Ejiokô", 3: "Etaogundá", 4: "Iyrosun", 5: "Oxê",
+                6: "Obará", 7: "Odi", 8: "Ejionilê", 9: "Ossá", 10: "Ofun",
+                11: "Oworin", 12: "Ejilaxeborá", 13: "Ejilobon", 14: "Iká", 15: "Ogbegundá", 16: "Aláfia"
+            };
+
+            return {
+                data_nascimento: dataNascimento,
+                odus: [
+                    { numero: odu1, nome: nomesOdus[odu1], tipo: "Odu da Essência" },
+                    { numero: odu2, nome: nomesOdus[odu2], tipo: "Odu da Expressão" },
+                    { numero: odu3, nome: nomesOdus[odu3], tipo: "Odu do Caminho" },
+                    { numero: odu4, nome: nomesOdus[odu4], tipo: "Odu da Realização" },
+                    { numero: odu5, nome: nomesOdus[odu5], tipo: "Odu do Destino" }
+                ],
+                interpretacao: gerarInterpretacao([odu1, odu2, odu3, odu4, odu5]),
+                passosCalculo: passosCalculo
+            };
+        }
+
+        function reduzirOdu(numero) {
+            // Reduz para número entre 1-16
+            while (numero > 16) {
+                numero = numero.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+            }
+            return numero === 0 ? 16 : numero;
+        }
+
+        function gerarInterpretacao(odus) {
+            const [odu1, odu2, odu3, odu4, odu5] = odus;
+            
+            return `
+                <p><strong>Odu da Essência (${odu1}):</strong> Representa sua natureza fundamental e características inatas.</p>
+                <p><strong>Odu da Expressão (${odu2}):</strong> Mostra como você se manifesta no mundo exterior.</p>
+                <p><strong>Odu do Caminho (${odu3}):</strong> Indica o caminho que você deve seguir para realizar seu potencial.</p>
+                <p><strong>Odu da Realização (${odu4}):</strong> Revela como você pode alcançar seus objetivos.</p>
+                <p><strong>Odu do Destino (${odu5}):</strong> Mostra seu propósito maior e lições de vida.</p>
+                <p class="mt-3">Esta interpretação é baseada no sistema de Odus da tradição africana. Para uma análise mais profunda, consulte um especialista.</p>
+            `;
+        }
+
+        function exibirResultados(resultado, nome) {
+            const oduContainer = document.getElementById('odu-container');
+            oduContainer.innerHTML = '';
+            
+            resultado.odus.forEach(odu => {
+                const oduItem = document.createElement('div');
+                oduItem.className = 'odu-item';
+                oduItem.innerHTML = `
+                    <h5>${odu.tipo}</h5>
+                    <div class="odu-number">${odu.numero}</div>
+                    <p>${odu.nome}</p>
+                `;
+                oduContainer.appendChild(oduItem);
+            });
+            
+            // Exibe os passos de cálculo
+            //document.getElementById('passo-a-passo').innerHTML = resultado.passosCalculo;
+            
+            document.getElementById('interpretacao-texto').innerHTML = resultado.interpretacao;
+            
+            // Exibir a seção de resultados
+            document.getElementById('resultados').style.display = 'block';
+            
+            // Rolagem suave para os resultados
+            document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+        crossorigin="anonymous"></script>
+</body>
+</html>
