@@ -8,72 +8,129 @@
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <title>Guia dos Odus</title>
     <style>
+        body {
+            font-size: 16px;
+            padding-top: 20px;
+        }
+        
+        .navbar-brand {
+            font-size: 1.2rem;
+        }
+        
+        .display-4 {
+            font-size: 2rem !important;
+        }
+        
+        .lead {
+            font-size: 1.1rem;
+        }
+        
         .result-card {
             background-color: #f8f9fa;
             border-radius: 10px;
             padding: 17px;
-            margin-top: 30px;
-            margin-left: 420px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 800px;
         }
+        
         .odu-number {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: #8B4513;
         }
+        
         .interpretation {
             background-color: #fff;
-            border-left: 4px solid #8B4513;
-            padding: 15px;
-            margin-top: 20px;
+            border-left: 3px solid #8B4513;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 0.95rem;
         }
+        
         .odu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
         }
+        
         .odu-item {
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .calculation-steps {
-            background-color: #f0f0f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-family: monospace;
+        
+        #dataNascimento {
+            text-align: center;
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .navbar-nav {
+                margin-top: 10px;
+            }
+            
+            .form-control-lg {
+                font-size: 1rem !important;
+                padding: 0.5rem 1rem;
+            }
+            
+            .btn-lg {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+            }
+            
+            .odu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .odu-item {
+                padding: 10px;
+            }
+            
+            .interpretation p {
+                margin-bottom: 0.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg text-bg-dark p-3">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand text-light" href="#">Guia dos Odus</a>
+            <a class="navbar-brand" href="#">Guia dos Odus</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarScroll">
-                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-light" aria-current="page" href="index.html">Jogo</a>
+                        <a class="nav-link active" aria-current="page" href="index.html">Jogo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="listaOdus.html">Lista de Odus</a>
+                        <a class="nav-link" href="listaOdus.html">Lista de Odus</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Buscar</button>
                 </form>
             </div>
         </div>
     </nav>
+
     <div class="container d-flex flex-column justify-content-center min-vh-100">
         <div class="row justify-content-center">
             <div class="col-8 text-center mb-4">
@@ -83,41 +140,37 @@
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-10 col-md-8 col-lg-6">
+            <div class="col-12 col-md-8 col-lg-6">
                 <form id="cabalaForm">
                     <div class="row g-3">
-                        <div class="col-12 col-sm-6">
-                            <input type="text" id="nomeCompleto" class="form-control form-control-lg" placeholder="Nome Completo"
-                                aria-label="Nome Completo" required>
+                        <div class="col-12 col-md-6">
+                            <input type="text" id="nomeCompleto" class="form-control form-control-lg" 
+                                   placeholder="Nome Completo" aria-label="Nome Completo" required>
                         </div>
-                        <div class="col-12 col-sm-6">
-                            <input type="text" id="dataNascimento" class="form-control form-control-lg" placeholder="dd/mm/aaaa"
-                                aria-label="Data de Nascimento" required>
+                        <div class="col-12 col-md-6">
+                            <input type="text" id="dataNascimento" class="form-control form-control-lg" 
+                                   placeholder="dd/mm/aaaa" aria-label="Data de Nascimento" required maxlength="10">
                         </div>
-                        <div class="col-12 text-center mt-4">
-                            <button type="submit" class="btn btn-dark btn-lg">Calcular Odus</button>
+                        <div class="col-12 text-center mt-3">
+                            <button type="submit" class="btn btn-dark btn-lg w-100">Calcular Odus</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div id="resultados" class="row justify-content-center mt-5" style="display: none;">
-            <div class="col-12 col-md-10 col-lg-8">
+        <div id="resultados" class="row justify-content-center mt-4" style="display: none;">
+            <div class="col-12">
                 <div class="result-card">
-                    <h2 class="text-center mb-4">Seus Odus</h2>
+                    <h2 class="text-center mb-3">Seus Odus</h2>
                     
-                    <div class="calculation-steps" id="passo-a-passo">
+                    <div class="calculation-steps" id="passo-a-passo"></div>
                     
-                    </div>
-                    
-                    <div class="odu-grid" id="odu-container">
-                    
-                    </div>
+                    <div class="odu-grid" id="odu-container"></div>
                     
                     <div class="interpretation">
-                        <h4>Interpretação</h4>
-                        <p id="interpretacao-texto"></p>
+                        <h4 class="h5">Interpretação</h4>
+                        <div id="interpretacao-texto"></div>
                     </div>
                 </div>
             </div>
@@ -125,6 +178,19 @@
     </div>
 
     <script>
+        document.getElementById('dataNascimento').addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2);
+            }
+            if (value.length > 5) {
+                value = value.substring(0, 5) + '/' + value.substring(5, 9);
+            }
+            
+            this.value = value;
+        });
+
         document.getElementById('cabalaForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -143,7 +209,6 @@
         });
 
         function calcular5Odus(dataNascimento) {
-        
             if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
                 alert("Formato de data inválido! Use DD/MM/AAAA");
                 return null;
@@ -152,26 +217,26 @@
             const partes = dataNascimento.split('/');
             const dia = partes[0];
             const mes = partes[1];
-            const ano = partes[2]; 
+            const ano = partes[2];
 
             // Passo a passo de cálculo
-            let passosCalculo = `<h5>Passo a Passo para ${dataNascimento}</h5>`;
+            let passosCalculo = `<h5 class="h6">Passo a Passo para ${dataNascimento}</h5>`;
             
             // Passo 1: Separar todos os dígitos individuais
             const digitos = [
-                parseInt(dia[0]), parseInt(dia[1]),  // Dia
-                parseInt(mes[0]), parseInt(mes[1]),  // Mês
-                parseInt(ano[0]), parseInt(ano[1]),  // Primeiros 2 do ano
-                parseInt(ano[2]), parseInt(ano[3])   // Últimos 2 do ano
+                parseInt(dia[0]), parseInt(dia[1]),
+                parseInt(mes[0]), parseInt(mes[1]),
+                parseInt(ano[0]), parseInt(ano[1]),
+                parseInt(ano[2]), parseInt(ano[3])
             ];
             
             passosCalculo += `<p>Dígitos separados: ${digitos.join(', ')}</p>`;
             
-            // Passo 2: Soma dígitos da esquerda (primeiro dígito de cada grupo)
+            // Passo 2: Soma dígitos da esquerda
             const esquerda = digitos[0] + digitos[2] + digitos[4] + digitos[6];
             passosCalculo += `<p>Soma dígitos esquerda (${digitos[0]} + ${digitos[2]} + ${digitos[4]} + ${digitos[6]}) = ${esquerda}</p>`;
             
-            // Passo 3: Soma dígitos da direita (segundo dígito de cada grupo)
+            // Passo 3: Soma dígitos da direita
             const direita = digitos[1] + digitos[3] + digitos[5] + digitos[7];
             passosCalculo += `<p>Soma dígitos direita (${digitos[1]} + ${digitos[3]} + ${digitos[5]} + ${digitos[7]}) = ${direita}</p>`;
             
@@ -212,7 +277,6 @@
         }
 
         function reduzirOdu(numero) {
-            // Reduz para número entre 1-16
             while (numero > 16) {
                 numero = numero.toString().split('').reduce((a, b) => a + parseInt(b), 0);
             }
@@ -223,12 +287,12 @@
             const [odu1, odu2, odu3, odu4, odu5] = odus;
             
             return `
-                <p><strong>Odu da Essência (${odu1}):</strong> Representa sua natureza fundamental e características inatas.</p>
-                <p><strong>Odu da Expressão (${odu2}):</strong> Mostra como você se manifesta no mundo exterior.</p>
-                <p><strong>Odu do Caminho (${odu3}):</strong> Indica o caminho que você deve seguir para realizar seu potencial.</p>
-                <p><strong>Odu da Realização (${odu4}):</strong> Revela como você pode alcançar seus objetivos.</p>
-                <p><strong>Odu do Destino (${odu5}):</strong> Mostra seu propósito maior e lições de vida.</p>
-                <p class="mt-3">Esta interpretação é baseada no sistema de Odus da tradição africana. Para uma análise mais profunda, consulte um especialista.</p>
+                <p><strong>Odu da Essência (${odu1}):</strong> Sua natureza fundamental.</p>
+                <p><strong>Odu da Expressão (${odu2}):</strong> Como você se manifesta.</p>
+                <p><strong>Odu do Caminho (${odu3}):</strong> Caminho para realização.</p>
+                <p><strong>Odu da Realização (${odu4}):</strong> Como alcançar objetivos.</p>
+                <p><strong>Odu do Destino (${odu5}):</strong> Propósito e lições.</p>
+                <p class="mt-2"><small>Baseado na tradição africana. Consulte um especialista para análise detalhada.</small></p>
             `;
         }
 
@@ -240,23 +304,17 @@
                 const oduItem = document.createElement('div');
                 oduItem.className = 'odu-item';
                 oduItem.innerHTML = `
-                    <h5>${odu.tipo}</h5>
+                    <h5 class="h6">${odu.tipo}</h5>
                     <div class="odu-number">${odu.numero}</div>
-                    <p>${odu.nome}</p>
+                    <p class="mb-0">${odu.nome}</p>
                 `;
                 oduContainer.appendChild(oduItem);
             });
             
-            // Exibe os passos de cálculo
             //document.getElementById('passo-a-passo').innerHTML = resultado.passosCalculo;
-            
             document.getElementById('interpretacao-texto').innerHTML = resultado.interpretacao;
-            
-            // Exibir a seção de resultados
             document.getElementById('resultados').style.display = 'block';
-            
-            // Rolagem suave para os resultados
-            document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('resultados').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     </script>
 
